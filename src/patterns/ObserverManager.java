@@ -12,60 +12,63 @@ import java.io.*;
  * @author delverOne25
  */
 public class ObserverManager {
-    /** *  <tt>listeners</tt>  Список обьектов ксобытия которых отслеживает ObserverManager  */  
-    Map<String, List<EventListener>> listeners  =new HashMap<>();
-    /**
-     * Конструктор.
-     * <p>Добавляет Список операций для каждой из которых будет свой список Слушателей</p>
-     * @param operations - Массив операций
-     */
-    public ObserverManager(String ...operations){
-        for(String operation : operations){
-            this.listeners.put(operation,new ArrayList<EventListener>());
-        }
-    }
-    /**
-     * Добавляет нового подписчика на определенное событие.
-     * <p>В случае если <tt>eventType</tt> не зарегестрирован, то генерирует исключение 
-     * @param eventType  - тип события
-     * @param listener   - подписичик реализовавший интерфейс EventListener
-     * @throws NullPointerException  если <tt>users</tt> равен <i>null</i>
-     */
-    public void subscribe(String eventType, EventListener listener) throws NullPointerException{
-        List<EventListener> users = listeners.get(eventType);
-        users.add(listener);
-    }
+    
+    public static class Observer{
+        /** *  <tt>listeners</tt>  Список обьектов ксобытия которых отслеживает ObserverManager  */  
+        Map<String, List<EventListener>> listeners  =new HashMap<>();
         /**
-     * Удаляет подписчика на определенное событие.
-     * <p>В случае если <eventType> не зарегестрирован, то генерирует исключение 
-     * @param eventType  - тип события
-     * @param listener   - подписичик реализовавший интерфейс EventListener
-     * @throws NullPointerException  если <users> равен <null>
-     */
-    public void unscribe(String eventType, EventListener listener) throws NullPointerException{
-        List<EventListener> users =listeners.get(eventType);
-        int index =users.indexOf(listener);
-        users.remove(index);
-    }
-    /**
-     * Уведомляет всех подписчиков о случившимся событии
-     * @param EventType - тип события
-     * @param file   - файл в котором произошло изменение
-     */
-    public void notify(String EventType, File file){
-        List<EventListener> users = listeners.get(EventType);
-        for(EventListener listener : users){
-            listener.update(EventType, file);
+         * Конструктор.
+         * <p>Добавляет Список операций для каждой из которых будет свой список Слушателей</p>
+         * @param operations - Массив операций
+         */
+        public Observer(String ...operations){
+            for(String operation : operations){
+                this.listeners.put(operation,new ArrayList<EventListener>());
+            }
+        }
+        /**
+         * Добавляет нового подписчика на определенное событие.
+         * <p>В случае если <tt>eventType</tt> не зарегестрирован, то генерирует исключение 
+         * @param eventType  - тип события
+         * @param listener   - подписичик реализовавший интерфейс EventListener
+         * @throws NullPointerException  если <tt>users</tt> равен <i>null</i>
+         */
+        public void subscribe(String eventType, EventListener listener) throws NullPointerException{
+            List<EventListener> users = listeners.get(eventType);
+            users.add(listener);
+        }
+            /**
+         * Удаляет подписчика на определенное событие.
+         * <p>В случае если <eventType> не зарегестрирован, то генерирует исключение 
+         * @param eventType  - тип события
+         * @param listener   - подписичик реализовавший интерфейс EventListener
+         * @throws NullPointerException  если <users> равен <null>
+         */
+        public void unscribe(String eventType, EventListener listener) throws NullPointerException{
+            List<EventListener> users =listeners.get(eventType);
+            int index =users.indexOf(listener);
+            users.remove(index);
+        }
+        /**
+         * Уведомляет всех подписчиков о случившимся событии
+         * @param EventType - тип события
+         * @param file   - файл в котором произошло изменение
+         */
+        public void notify(String EventType, File file){
+            List<EventListener> users = listeners.get(EventType);
+            for(EventListener listener : users){
+                listener.update(EventType, file);
+            }
         }
     }
     
     // Издатель события. Изменения которого будут отслеживать наблюдатели
     public static class Editor{
-        public ObserverManager observer;
+        public Observer observer;
         private File mfile;
         
         public Editor(){
-            this.observer = new ObserverManager("open","save","close");
+            this.observer = new Observer("open","save","close");
         }
         // Оповещает слушателей о открытии файла
         public void openFile(String path){
@@ -123,6 +126,7 @@ public class ObserverManager {
     
     public static class LogOpenListener implements EventListener{
         private final String mlog;
+        private float 
         
         public LogOpenListener(String log){
             mlog=log;
