@@ -89,8 +89,8 @@ public class ObserverExample {
      *  и их существующий курс.
      *Биржа умеет добавлять валюты, определять их начальную цену и изменять их.
      *<p>При изменении курса валюты вызывает метод {@link moveCourse}, который в свою очередь
-     *  вызывает {@code notify()} обьекта {@link Coordinator}, который оповещает слушателей
-     *<p>Методы {@code getDinamicChange} и {@code getAnaliticDif} возращают историю изменения курса валют
+     *  вызывает {@code  notify()} обьекта {@code coordinator}, который оповещает слушателей
+     *<p>Методы {@link getDinamicChange} и {@link getAnaliticDif} возращают историю изменения курса валют
      *  и динамику изменения в виде массива float[].
      */
     public static class Exchange{// список с значанием для каждой валюты/
@@ -121,8 +121,10 @@ public class ObserverExample {
             this(basicISO, -1);
         }
         /**
-         * 
-         * @param basicISO  устанавливает {@link basicISO} базовую валюту, относительно которой будут изменяться другие
+         * Конструктор. Обьявлят Наблюдателя {@link Coordinator}. Добовляет валюты в список его отсеживаний.
+         * <p>В случае если была переданна новая валюта, отличная от <ii>USD<ii>.То происходит пересчет стандартно установленных
+         * Валют, курс переданной валюты становиться <b>1.0f</b>.Остальнные же изменяются относительно него.
+         * @param basicISO      устанавливает {@link basicISO} базовую валюту, относительно которой будут изменяться другие
          * @param ParambasicVal базовый курс новой валюту, относительно которой будут пересчитаны все другие
          */
         public Exchange(String basicISO,float ParambasicVal){
@@ -173,8 +175,8 @@ public class ObserverExample {
          * Сохраним новое значение действущего курса и добавим в историю для аналитики
          * <p>Если переданное значение валюты, является базовой валюты, от которой зависят другие
          * то изменим все зависимые от нею, само же значение базовой валюты должно быть <b>1.0f</b>
-         * @param iso -название валюты
-         * @param newValue  - новое значение
+         * @param iso       - название валюты
+         * @param newValue  - новое значение курса валют
          */
         public void moveCourse(String iso,float newValue){
             float oldValue=exchangeRates.replace(iso, newValue);
@@ -222,10 +224,10 @@ public class ObserverExample {
     }
     
      /**
-     * Interface {@code Listener} определяет метод {@code report} который
+     * Interface {@code Listener} определяет метод {@code report} 
      *  который вызывается при изменении курса валюты.
      * <p> Реализация методом будет обработчиком события. 
-     *<p>Метод {@link getISO} должен возвращать строку название валюты установленной
+     *<p>Метод {@link getISO} должен возвращать строку название установленной валюты 
      */
     public interface Listener {
           public void report(float newValue);

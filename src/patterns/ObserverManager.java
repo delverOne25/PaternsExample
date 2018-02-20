@@ -126,7 +126,7 @@ public class ObserverManager {
     
     public static class LogOpenListener implements EventListener{
         private final String mlog;
-        private float 
+         
         
         public LogOpenListener(String log){
             mlog=log;
